@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+<!-- ======= Hero Section ======= -->
+<div class="">
+  <video onContextMenu="return false;" autoplay muted loop class="back-anim">
+    <source  src="{{ url_for('static', filename='img/top-anim.mp4') }}" type="video/mp4">
+  </video>
+</div>
+
+<!-- ======= Hero Section ======= -->
+
+<section id="hero" class="d-flex align-items-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 d-flex flex-column justify-content-center pt-4 pt-lg-0 order-2 order-lg-1"
+        data-aos="fade-right" data-aos-delay="200">
+        <h1>Predict Your Future Stock </h1>
+        <h2>It's times is to predict your future</h2>
+        <div class="d-flex justify-content-center justify-content-lg-start">
+          <form action="/predict" method="POST">
+            <input name="stock_ticker" type="text" class="input-ticker" placeholder="Enter Ticker Symbol">
+            <button id="predict" class="btn-submit">Predict</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
+        <img onContextMenu="return false;" src="{{ url_for('static', filename='img/side.png') }}" class="img-fluid animated" alt="">
+      </div>
+    </div>
+    <div class="row justify-content-content-center footer-bottom clearfix">
+      <div class="copyright">
+        &copy; Copyright <strong><span>PRMITR</span></strong>. All Rights Reserved
+      </div>
+    </div>
+  </div>
+</section><!-- End Hero -->
+
+
+{% endblock %}

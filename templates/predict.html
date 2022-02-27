@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>{{ stock_ticker }}</h1>
+    <p>{{ summary }}</p>
+    <h3>Next Day Prediction: {{ prediction }}</h3>
+    <h3>Original and Predicted Price Plot</h3>
+    <img src={{ image }} alt="plot">
+{% endblock %}
