@@ -106,7 +106,7 @@ Pympler==0.9
 PyMsgBox==1.0.9
 pyparsing==2.4.7
 pyperclip==1.8.1
-pypiwin32==223
+pypiwin32
 PyRect==0.1.4
 pyrsistent==0.18.0
 PyScreeze==0.1.26
