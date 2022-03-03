@@ -115,8 +115,6 @@ pyttsx3==2.90
 PyTweening==1.0.3
 pytz==2021.1
 pytz-deprecation-shim
-pywhatkit
-pywin32
 pywinpty==1.1.6
 pyzmq==22.3.0
 requests==2.25.1
