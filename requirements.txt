@@ -97,6 +97,7 @@ protobuf==3.15.8
 pyarrow==6.0.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+PyAudio @ file:///C:/Users/Acer/Downloads/PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
 PyAutoGUI==0.9.52
 pycparser==2.21
 pydeck==0.7.1
@@ -106,7 +107,7 @@ Pympler==0.9
 PyMsgBox==1.0.9
 pyparsing==2.4.7
 pyperclip==1.8.1
-pypiwin32
+pypiwin32==223
 PyRect==0.1.4
 pyrsistent==0.18.0
 PyScreeze==0.1.26
@@ -115,6 +116,8 @@ pyttsx3==2.90
 PyTweening==1.0.3
 pytz==2021.1
 pytz-deprecation-shim
+pywhatkit
+pywin32
 pywinpty
 pyzmq==22.3.0
 requests==2.25.1
@@ -147,7 +150,6 @@ toml==0.10.2
 toolz==0.11.2
 tornado==6.1
 traitlets==5.1.1
-typing-extensions==3.7.4.3
 tzdata==2021.5
 tzlocal==4.1
 update==0.0.1
@@ -162,4 +164,3 @@ wikipedia==1.4.0
 wrapt==1.13.3
 yarg==0.1.9
 yfinance==0.1.67
-zipp==3.4.1
