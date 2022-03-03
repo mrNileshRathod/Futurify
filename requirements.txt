@@ -129,9 +129,7 @@ six==1.15.0
 sklearn==0.0
 smmap==5.0.0
 soupsieve==2.1
-SpeechRecognition==3.8.1
 SQLAlchemy==1.4.12
-streamlit==1.2.0
 style==1.1.0
 td-client==1.2.1
 tenacity==8.0.1
