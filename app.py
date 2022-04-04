@@ -1,17 +1,19 @@
 from flask import Flask, render_template, request, redirect
 import yfinance as yf
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import pandas as pd
+import json
 import pandas_datareader as web
 import datetime as dt
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import load_model
-import io
-import base64
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import plotly
+import plotly.express as px
 
-
+# import io
+# import base64
+# from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 # Loading Flask Application
 app = Flask(__name__)
@@ -20,19 +22,12 @@ app = Flask(__name__)
 # Home route
 @app.route('/')
 def index():
-    """
-    Displays the home page with a form to enter stock ticker
-    """
     return render_template('index.html')
 
 
 # Predict route
 @app.route('/predict', methods=["POST"])
 def predict():
-    """
-    Displays the predicted share price, summary and plot for a stock.
-    Expects a form input named stock_ticker via post method
-    """
 
     # Get the input stock ticker
     stock_ticker = request.form.get("stock_ticker")
@@ -42,41 +37,27 @@ def predict():
     stock = yf.Ticker(stock_ticker)
 
     # If not a valid stock ticker, redirect to home route
-    if stock.info["regularMarketPrice"] == None:
+    if stock.info["regularMarketPrice"] is None:
         return redirect("/")
 
     # Get business summary
     summary = stock.info["longBusinessSummary"]
 
     # Get prediction value and the image string
-    prediction, image = predict_next_value(stock_ticker)
+    prediction, graphJSON = predict_next_value(stock_ticker)
 
-    return render_template("predict.html", stock_ticker=stock_ticker, summary=summary, prediction=prediction, image=image)
-
+    return render_template("predict.html", stock_ticker=stock_ticker, summary=summary, prediction=prediction,
+                           imagePred=graphJSON)
 
 
 def predict_next_value(tickerSymbol):
-    """
-    Predicts the next day share price for a stock.
-    Expects a tickerSymbol which is the ticker for the stock.
-    Returns the predicted share price and a .png image encoded as a base64 string.
-    """
-
-    """
-    # loading data
-    START = dt.datetime(2015, 1, 1)
-    END = dt.datetime.now()
-    main_data = web.DataReader(tickerSymbol, 'yahoo', START, END)
-    main_data.reset_index(inplace=True)
-    """
-
     # Data
     start = dt.datetime(2015, 1, 1)
-    end = dt.datetime(2021, 6, 1)
+    end = dt.datetime(2021, 5, 28)
     data = web.DataReader(tickerSymbol, 'yahoo', start, end)
     data = data.reset_index()
 
-    # predicition day
+    # prediction day
     pred_day = 60
 
     # Scalar
@@ -84,13 +65,21 @@ def predict_next_value(tickerSymbol):
     scaled_data = scaler.fit_transform(data['Close'].values.reshape(-1, 1))
 
     # Test Model
-    model = load_model("model.h5");
+    model = load_model("model.h5")
 
     test_start = dt.datetime(2021, 6, 1)
     test_end = dt.datetime.now()
     test_data = web.DataReader(tickerSymbol, 'yahoo', test_start, test_end)
+    test_data = test_data.reset_index()
 
+    # Test "Close" data and "Dates"
     actual_prices = test_data['Close'].values
+    test_dates = test_data[['Date']]
+
+    # Combining Test and Train Data
+    d1 = pd.DataFrame(data['Close'])
+    d2 = pd.DataFrame(test_data['Close'])
+    total_dataset = pd.concat([data['Close'], test_data['Close']], ignore_index=True)
 
     total_dataset = pd.concat((data['Close'], test_data['Close']), axis=0)
 
@@ -100,8 +89,8 @@ def predict_next_value(tickerSymbol):
 
     # Prediction of test data
     x_test = []
-    for x in range(pred_day, len(model_inputs)+1):
-        x_test.append(model_inputs[x-pred_day:x, 0])
+    for x in range(pred_day, len(model_inputs) + 1):
+        x_test.append(model_inputs[x - pred_day:x, 0])
 
     x_test = np.array(x_test)
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
@@ -109,8 +98,7 @@ def predict_next_value(tickerSymbol):
     predicted_prices = model.predict(x_test)
     predicted_prices = scaler.inverse_transform(predicted_prices)
 
-
-    # Graph (Final Predicted by ML Model with Actual Data set) 
+    # Graph (Final Predicted by ML Model with Actual Data set)
     """
     This is code written by Nilesh, I replaced this code with the code written
     below for the plot.
@@ -125,31 +113,61 @@ def predict_next_value(tickerSymbol):
     plt.legend()
     """
 
+    """
     fig = plt.figure(figsize=(10,5))
-    axes = fig.add_axes([0.1,0.1,0.6,0.6])
+    axes = fig.add_axes([0.1,0.1,0.75,0.75])
     axes.plot(actual_prices, color="black", label=f"Actual {tickerSymbol} Price")
     axes.plot(predicted_prices, color="green", label=f"Predicted {tickerSymbol} Price")
     axes.set_title(f"{tickerSymbol} Share Price")
     axes.set_xlabel("Time")
     axes.set_ylabel(f"{tickerSymbol} Share Price")
     axes.legend()
-    
+    """
+
+    """
+    fig = plt.figure(figsize=(10, 5))
+    axes = fig.add_axes([0.1, 0.1, 0.75, 0.75])
+    plt.plot(actual_prices, color="black", label=f"Actual {tickerSymbol} Price")
+    plt.plot(predicted_prices, color="green", label=f"Predicted {tickerSymbol} Price")
+    plt.set_title(f"{tickerSymbol} Share Price")
+    plt.set_xlabel("Time")
+    plt.set_ylabel(f"{tickerSymbol} Share Price")
+    plt.legend()
+
     # Convert plot to PNG image
     pngImage = io.BytesIO()
     FigureCanvas(fig).print_png(pngImage)
-    
+
     # Encode PNG image to base64 string
     pngImageB64String = "data:image/png;base64,"
     pngImageB64String += base64.b64encode(pngImage.getvalue()).decode('utf8')
+    """
 
-    #Next day
-    real_data = [model_inputs[len(model_inputs+1) - pred_day : len(model_inputs+1), 0]]
+    # converting a dataframe for plot
+    test_dates = test_dates.to_numpy()
+
+    test_dates = np.reshape(test_dates, (1, np.product(test_dates.shape)))[0]
+    actual_prices = np.reshape(actual_prices, (1, np.product(actual_prices.shape)))[0]
+    predicted_prices = np.reshape(predicted_prices, (1, np.product(predicted_prices.shape)))[0]
+    predicted_prices = predicted_prices[:len(predicted_prices) - 1]
+
+    res_dict = {'Date': test_dates, 'Actual Price': actual_prices, 'Predicted Price': predicted_prices}
+    res_final = pd.DataFrame(res_dict)
+
+    fig = px.line(res_final, x='Date', y=['Actual Price', 'Predicted Price'])
+    fig.update_layout(xaxis_title="Date (in Months)", yaxis_title="Price (in ₹)", legend=dict(title=None, x=0.01, y=0.99))
+    fig.layout.update(xaxis_rangeslider_visible=True)
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
+    # Next day
+    real_data = [model_inputs[len(model_inputs + 1) - pred_day: len(model_inputs + 1), 0]]
     real_data = np.array(real_data)
     real_data = np.reshape(real_data, (real_data.shape[0], real_data.shape[1], 1))
     prediction = model.predict(real_data)
-    prediction = scaler.inverse_transform(prediction) # final Ans
+    prediction = scaler.inverse_transform(prediction)  # final Ans
 
-    return (prediction[0][0], pngImageB64String)
+    return prediction[0][0], graphJSON
 
 
 # Main Function

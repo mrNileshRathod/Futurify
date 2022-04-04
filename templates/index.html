@@ -1,10 +1,16 @@
 {% extends "layout.html" %}
 
 {% block body %}
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center">
+      <h1 class="logo me-auto"><a>FUTURIFY</a></h1>
+    </div>
+  </header><!-- End Header -->
 
 <!-- ======= Hero Section ======= -->
 <div class="">
-  <video onContextMenu="return false;" autoplay muted loop class="back-anim">
+  <video onContextMenu="false;" autoplay muted loop class="back-anim">
     <source  src="{{ url_for('static', filename='img/top-anim.mp4') }}" type="video/mp4">
   </video>
 </div>

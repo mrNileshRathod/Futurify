@@ -1,0 +1,149 @@
+#top {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+} 
+#top .top-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+#top h1 {
+  margin: 0 0 10px 0;
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 56px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: -1px 0 2px #2f4d5a;
+}
+#top h2 {
+  color: #fff;
+  margin-bottom: 50px;
+  font-size: 20px;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-shadow: -1px 0 2px #2f4d5a;
+}
+#top .btn-get-started {
+  font-size: 36px;
+  display: inline-block;
+  padding: 4px 0;
+  border-radius: 50px;
+  transition: 0.3s ease-in-out;
+  margin: 10px;
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  border: 2px solid #fff;
+  color: #fff;
+}
+#top .btn-get-started:hover {
+  padding-top: 8px;
+  background: rgba(255, 255, 255, 0.15);
+}
+@media (min-width: 1024px) {
+  #top {
+    background-attachment: fixed;
+  }
+}
+@media (max-width: 768px) {
+  #top h1 {
+    font-size: 28px;
+    line-height: 36px;
+  }
+  #top h2 {
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 30px;
+  }
+}
+/* 
+section {
+  padding: 10px 0;
+} */
+
+/*--------------------------------------------------------------
+# About Company
+--------------------------------------------------------------*/
+.about-comapany {
+  background: url("../img/about-company.png") fixed center center;
+  background-size: cover;
+  position: relative;
+  color: #fff;
+  padding: 60px 0;
+}
+.about-comapany:before {
+  content: "";
+  background: rgba(3,17,30,0.8);
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.about-comapany h1 {
+  font-weight: 600;
+  line-height: 56px;
+  text-transform: uppercase;
+}
+.about-comapany p {
+  text-align: justify;
+  line-height: 25px;
+}
+
+
+/*--------------------------------------------------------------
+# Stcok Price
+--------------------------------------------------------------*/
+.stock-price {
+  background: #f9f9fa;
+  padding: 60px 0;
+}
+.stock-price h1 {
+  font-weight: 600;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+}
+.stock-price .card-icon {
+  font-size: 32px;
+  line-height: 0;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+.stock-price .open-card .card-icon {
+  color: #4154f1;
+}
+.stock-price .close-card .card-icon {
+  color: #2eca6a;
+}
+.stock-price .next-card .card-icon {
+  color: #ff771d;
+} 
+
+/*--------------------------------------------------------------
+# Reports/Charts
+--------------------------------------------------------------*/
+.report {
+  background: url("../img/p.jpg") fixed center center;
+  padding: 60px 0;
+  background-size: cover;
+  overflow-x: hidden;
+  color: #fff;
+}
+
+.report  h1 {
+  font-weight: 600;
+  line-height: 56px;
+  text-transform: uppercase;
+}

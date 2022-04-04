@@ -25,31 +25,27 @@
 
   <!-- Main CSS File -->
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style1.css') }}" rel="stylesheet">
 </head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top">
-    <div class="container d-flex align-items-center">
-      <h1 class="logo me-auto"><a>FUTURIFY</a></h1>
-    </div>
-  </header><!-- End Header -->
-
-  {% block body %}{% endblock %}
-
-
+  {% block body %}
+  {% endblock %}
 
   <div id="preloader"></div>
-  <!-- <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a> -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="{{ url_for('static', filename='vendor/aos/aos.js') }}"></script>
   <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/purecounter/purecounter.js') }}"></script>
 
   <!-- Template Main JS File -->
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/vanilla-tilt.js') }}"></script>
+
 </body>
 
 </html>

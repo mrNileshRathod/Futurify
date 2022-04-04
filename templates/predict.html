@@ -1,9 +1,107 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <h1>{{ stock_ticker }}</h1>
-    <p>{{ summary }}</p>
-    <h3>Next Day Prediction: {{ prediction }}</h3>
-    <h3>Original and Predicted Price Plot</h3>
-    <img src={{ image }} alt="plot">
+
+    <header id="header" class="fixed-top">
+        <div class="container d-flex align-items-center">
+            <h1 class="logo me-auto"><a>FUTURIFY</a></h1>
+        </div>
+    </header>
+    <div class="">
+        <video onContextMenu="false;" autoplay muted loop class="back-anim">
+            <source src="{{ url_for('static', filename='img/top-anim.mp4') }}" type="video/mp4">
+        </video>
+    </div>
+    <!-- ======= top Section ======= -->
+    <section id="top">
+        <div class="top-container" data-aos="zoom-in" data-aos-delay="100">
+            <h1>Stock Price Prediction of {{ stock_ticker }}</h1>
+            <h2>We are team of talented designers making websites with Bootstrap</h2>
+            <a href="#main" class="btn-get-started scrollto"><i class="bi bi-chevron-double-down"></i></a>
+        </div>
+    </section><!-- End top -->
+    <main id="main" class="main">
+        <section class="about-comapany">
+            <div class="container" data-aos="fade-up">
+                <div class="row">
+                    <h1>About {{ stock_ticker }}</h1>
+                    <p>{{ summary }}</p>
+                </div>
+            </div>
+        </section>
+        <section class="stock-price">
+            <div class="container">
+                <div class="row">
+                    <h1>Analysis</h1>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card open-card" data-tilt data-tilt-max="30" data-tilt-speed="400" data-tilt
+                            data-tilt-glare="true">
+                            <div class="card-body">
+                                <h5 class="card-title">Today Open Price</h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-coin"></i>
+                                    </div>
+                                    <div class="count-box ps-3">
+                                        <span data-purecounter-start="0" data-purecounter-end="232"
+                                            data-purecounter-duration="1" class="purecounter"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card close-card" data-tilt data-tilt-max="30" data-tilt-speed="400" data-tilt
+                            data-tilt-glare="true">
+                            <div class="card-body">
+                                <h5 class="card-title">Last Close Price</h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="count-box ps-3">
+                                        <span data-purecounter-start="0" data-purecounter-end="232"
+                                            data-purecounter-duration="1" class="purecounter"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="card next-card" data-tilt data-tilt-max="30" data-tilt-speed="400" data-tilt
+                            data-tilt-glare="true">
+                            <div class="card-body">
+                                <h5 class="card-title">Next Day Price</h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-cart-plus-fill"></i>
+                                    </div>
+                                    <div class="count-box ps-3">
+                                        <span data-purecounter-start="0" data-purecounter-end="{{ prediction }}"
+                                            data-purecounter-duration="1" class="purecounter"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="report">
+            <div class="container">
+                <div class="row">
+                    <h1>Report</h1>
+                    <div class="chart" id="chart"></div>
+                </div>
+            </div>
+        </section>
+    </main><!-- End #main -->
+    
+    <!-- Plotly JS File -->
+    <script src="https://cdn.plot.ly/plotly-2.9.0.min.js"></script>
+    <script type="text/javascript">
+        var graphs = {{ imagePred | safe }};
+        var config = {responsive: true, displayModeBar: true};
+        Plotly.newPlot('chart', graphs, config);
+    </script>   
 {% endblock %}
