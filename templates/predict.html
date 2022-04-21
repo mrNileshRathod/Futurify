@@ -37,13 +37,13 @@
                         <div class="card open-card" data-tilt data-tilt-max="30" data-tilt-speed="400" data-tilt
                             data-tilt-glare="true">
                             <div class="card-body">
-                                <h5 class="card-title">Today Open Price</h5>
+                                <h5 class="card-title">Last Close Price</h5>
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-coin"></i>
                                     </div>
                                     <div class="count-box ps-3">
-                                        <span data-purecounter-start="0" data-purecounter-end="232"
+                                        <span data-purecounter-start="0" data-purecounter-end="{{ last_close_price }}"
                                             data-purecounter-duration="1" class="purecounter"></span>
                                     </div>
                                 </div>
@@ -54,13 +54,13 @@
                         <div class="card close-card" data-tilt data-tilt-max="30" data-tilt-speed="400" data-tilt
                             data-tilt-glare="true">
                             <div class="card-body">
-                                <h5 class="card-title">Last Close Price</h5>
+                                <h5 class="card-title">Accuracy of Model</h5>
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-currency-dollar"></i>
+                                        <i class="bi bi-bullseye"></i>
                                     </div>
                                     <div class="count-box ps-3">
-                                        <span data-purecounter-start="0" data-purecounter-end="232"
+                                        <span data-purecounter-start="0" data-purecounter-end="{{accuracy}}"
                                             data-purecounter-duration="1" class="purecounter"></span>
                                     </div>
                                 </div>

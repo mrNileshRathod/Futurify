@@ -1,3 +1,4 @@
+import sklearn.metrics
 from flask import Flask, render_template, request, redirect
 import yfinance as yf
 import numpy as np
@@ -9,6 +10,7 @@ import datetime as dt
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import load_model
 import plotly
+from sklearn.metrics import r2_score
 import plotly.express as px
 
 # import io
@@ -44,10 +46,9 @@ def predict():
     summary = stock.info["longBusinessSummary"]
 
     # Get prediction value and the image string
-    prediction, graphJSON = predict_next_value(stock_ticker)
+    prediction, graphJSON, last_close_price, accuracy = predict_next_value(stock_ticker)
 
-    return render_template("predict.html", stock_ticker=stock_ticker, summary=summary, prediction=prediction,
-                           imagePred=graphJSON)
+    return render_template("predict.html", stock_ticker=stock_ticker, summary=summary, prediction=prediction, last_close_price=last_close_price, accuracy=accuracy, imagePred=graphJSON)
 
 
 def predict_next_value(tickerSymbol):
@@ -70,6 +71,10 @@ def predict_next_value(tickerSymbol):
     test_start = dt.datetime(2021, 6, 1)
     test_end = dt.datetime.now()
     test_data = web.DataReader(tickerSymbol, 'yahoo', test_start, test_end)
+
+    # Last Day Close Price
+    last_close_price = test_data[len(test_data) - 2:len(test_data) - 1]['Close'][0]
+
     test_data = test_data.reset_index()
 
     # Test "Close" data and "Dates"
@@ -77,8 +82,8 @@ def predict_next_value(tickerSymbol):
     test_dates = test_data[['Date']]
 
     # Combining Test and Train Data
-    d1 = pd.DataFrame(data['Close'])
-    d2 = pd.DataFrame(test_data['Close'])
+    # d1 = pd.DataFrame(data['Close'])
+    # d2 = pd.DataFrame(test_data['Close'])
     total_dataset = pd.concat([data['Close'], test_data['Close']], ignore_index=True)
 
     total_dataset = pd.concat((data['Close'], test_data['Close']), axis=0)
@@ -89,14 +94,24 @@ def predict_next_value(tickerSymbol):
 
     # Prediction of test data
     x_test = []
+    y_test = total_dataset[len(total_dataset) - len(test_data)::]
     for x in range(pred_day, len(model_inputs) + 1):
         x_test.append(model_inputs[x - pred_day:x, 0])
 
     x_test = np.array(x_test)
+    y_test = np.array(y_test)
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
 
     predicted_prices = model.predict(x_test)
     predicted_prices = scaler.inverse_transform(predicted_prices)
+
+    model_pred = predicted_prices[:len(predicted_prices)-1]
+
+    # R2 Score Value
+    accuracy = r2_score(y_test, model_pred) * 100
+
+    print(y_test.shape)
+    print(model_pred.shape)
 
     # Graph (Final Predicted by ML Model with Actual Data set)
     """
@@ -167,7 +182,7 @@ def predict_next_value(tickerSymbol):
     prediction = model.predict(real_data)
     prediction = scaler.inverse_transform(prediction)  # final Ans
 
-    return prediction[0][0], graphJSON
+    return prediction[0][0], graphJSON, last_close_price, accuracy
 
 
 # Main Function
